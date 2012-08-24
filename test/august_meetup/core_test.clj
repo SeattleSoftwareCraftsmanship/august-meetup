@@ -12,3 +12,6 @@
   (is (= (translate 20) "twenty"))
   (is (= (translate 21) "twenty-one"))
   (is (= (translate 22) "twenty-two")))
+
+(deftest tranlating-big-numbers
+  (is (= (translate 234) "two-hundred and thirty-four")))
