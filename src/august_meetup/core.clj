@@ -1,23 +1,25 @@
 (ns august_meetup.core)
 
+(def single-digits ["zero" "one" "two" "three" "four"
+                    "five" "six" "seven" "eight" "nine"])
+
+(def teens {10 "ten" 11 "eleven" 12 "twelve" 13 "thirteen"
+            14 "fourteen" 15 "fifteen" 16 "sixteen"
+            17 "seventeen" 18 "eighteen" 19 "nineteen"})
+
+(def tens {20 "twenty" 30 "thirty" 40 "fourty" 50 "fifty"
+           60 "sixty" 70 "seventy" 80 "eighty" 90 "ninety"})
+
 (defn translate [n]
+  (if (decimal? n)
+    (translate (int n)))
   (cond
+    (<= n 9) (single-digits n)
+    (<= 10 n 19) (teens n)
+    (<= 20 n 99) (str (tens n)
+                      (let [rem (mod n 10)]
+                        (when (not= 0 rem)
+                          (str "-" (translate rem)))))
     (< 100 n)
-    (str (translate (int (Math/floor (/ (double n) 100.0))))
-         "-hundred and " (translate (int (mod n 100.0))))
-    (= 0 n) "zero"
-    (= 1 n) "one"
-    (= 2 n) "two"
-    (= 3 n) "three"
-    (= 4 n) "four"
-    (= 5 n) "five"
-    (= 6 n) "six"
-    (= 7 n) "seven"
-    (= 8 n) "eight"
-    (= 9 n) "nine"
-    (= 10 n) "ten"
-    (= 11 n) "eleven"
-    (= 20 n) "twenty"
-    (< 30 n 40) (str "thirty-" (translate (- n 30)))
-    (= 30 n) "thirty"
-    (<= 20 n) (str "twenty-" (translate (- n 20)))))
+    (str (translate (Math/floor (/ (double n) 100.0)))
+         "-hundred and " (translate (mod n 100)))))
